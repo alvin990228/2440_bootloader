@@ -1,0 +1,13 @@
+SECTIONS{
+
+   . =0x30000000;
+
+   .text : {
+	
+		boot.o nand.o  f.o *(.text) 
+	
+	}
+
+
+
+}
