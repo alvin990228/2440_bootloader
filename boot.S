@@ -10,7 +10,7 @@
  *6.Add LED Signal for Debug*********r6 register use to send signal!!
  *
  *2015.01.09
- *Now this project 
+ *Now this project is Managed By GitHub 
 ********************************************************************/
 
 #include"s3c2440.h"

@@ -1,0 +1,31 @@
+#ifndef LED_H
+#define LED_H
+
+/**************************************
+ *in mini2440 
+ * 4 LEDs  LED_1:GPB5,LED_2:PGB6
+ *         LED_2:GPB7,LED_4:GPB8
+ * ***********************************/
+
+#define GPBCON  (*(volatile unsigned int *)(0x56000010))
+#define GPBDAT  (*(volatile unsigned int *)(0x56000014))
+#define GPBUP   (*(volatile unsigned int *)(0x56000018))
+
+#define LED_IO    ((1<<10)|(1<<12)|(1<<14)|(1<<16)) //set GPB5-8 output
+#define LED_DISUP  ((1<<5)|(1<<6)|(1<<7)|(1<<8))    //diable GPB5-8 pull-up 
+#define LED_1OFF    (1<<5)
+#define LED_2OFF    (1<<6)
+#define LED_3OFF    (1<<7)
+#define LED_4OFF    (1<<8)
+
+#define LED_1ON    ~(1<<5)
+#define LED_2ON    ~(1<<6)
+#define LED_3ON    ~(1<<7)
+#define LED_4ON    ~(1<<8)
+#define LED_13   ~((1<<5)|(1<<7))
+#define LED_24   ~((1<<6)|(1<<8))
+#define LED_OFF  0xFF
+#define LED_ON   0x00
+
+
+#endif
