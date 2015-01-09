@@ -8,9 +8,6 @@
  *4.Copy code from NandFlash to SDRAM
  *5.Run Code on the SDRAM
  *6.Add LED Signal for Debug*********r6 register use to send signal!!
- *
- *2015.01.09
- *Now this project 
 ********************************************************************/
 
 #include"s3c2440.h"
