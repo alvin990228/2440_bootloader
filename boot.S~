@@ -1,4 +1,4 @@
-/******************************************************************
+/********************************************************************************************
  *Alvin-boot 2015.01.02 writen by Alvin
  *Versin:0.1.0
  *Functions:
@@ -10,41 +10,42 @@
  *6.Add LED Signal for Debug*********r6 register use to send signal!!
  *
  *2015.01.09
- *Now this project is Managed By GitHub 
-********************************************************************/
+ *Now this project is Managed By GitHub @github.com:alvin990228/2440_bootloader.git
+**********************************************************************************************/
 
 #include"s3c2440.h"
 
 .section .text
 .global _start
 _start:
-
+/*Exception Vectors*/
+	/*0x00 Reset*/
 	b reset
 	
-		/* 0x04: 未定义指令中止模式的向量地址 */
+		/* 0x04: Undefined instruction  */
 HandleUndef:
     b   HandleUndef 
  
-		/* 0x08: 管理模式的向量地址，通过SWI指令进入此模式 */
+		/* 0x08:  SWI */
 HandleSWI:
     b   HandleSWI
 
-  	/* 0x0c: 指令预取终止导致的异常的向量地址 */
+  	/* 0x0c: Abort prefech */
 HandlePrefetchAbort:
     b   HandlePrefetchAbort
 
-		/* 0x10: 数据访问终止导致的异常的向量地址 */
+		/* 0x10: Abort data */
 HandleDataAbort:
     b   HandleDataAbort
 
-		/* 0x14: 保留 */
+		/* 0x14: Reserved */
 HandleNotUsed:
     b   HandleNotUsed
 
-		/* 0x18: 中断模式的向量地址 */
+		/* 0x18: IRQ*/
     b   HandleIRQ
 
-		/* 0x1c: 快中断模式的向量地址 */
+		/* 0x1c: FIQ */
 HandleFIQ:
     b   HandleFIQ
 	
@@ -93,9 +94,9 @@ reset:
 ************************************************/
 
 		msr cpsr_c, #0xd2       @ Alvin+ : Enter the IRQ mode
-    ldr sp, =IRQSTACK       @ Alvin+ : now the sp is irq_sp 
+    		ldr sp, =IRQSTACK       @ Alvin+ : now the sp is irq_sp 
 
-    msr cpsr_c, #0xd3       @ Alvin+ : Return to the SVC mode
+   	        msr cpsr_c, #0xd3       @ Alvin+ : Return to the SVC mode
 
 
 
@@ -286,7 +287,33 @@ SMRDATA:
 	ldr sp, =SVCSTACK
 	mov fp, #0
 
+
+/************************************************
+*Initialize the Interrupt Controler and
+*enable the IRQs
+*for Using INTs
+*************************************************/
 	
+	
+/*Initialize the interrupt*/
+	ldr r0, =GPGCON
+	ldr r1, =0x80A882  @SET GPIO0,3,5,6,7,11 EINT
+	str r1, [r0]
+	
+	ldr r0, =GPGUP
+	ldr r1, =0x8E9    @Disable pull-up
+	str r1, [r0]
+	
+	ldr r0, =EINTMASK
+	ldr r1, =0xFFF716FF  @disable masking interrupts
+	str r1, [r0]
+     	 
+	ldr r0, =INTMSK 
+    	ldr r1, =0xFFFFFFDF  @EINT8_23 service avaliable
+	str r1, [r0]
+	
+
+        msr cpsr_c, #0x53       @enable the IRQ in CPSR in SVC mode
 /**********************************************
 *Everything is fine now,Ready run on the SDRAM
 **********************************************/
@@ -330,17 +357,25 @@ led:
 
 
 HandleIRQ:
-    sub lr, lr, #4                  @ 计算返回地址
-    stmdb   sp!,    { r0-r12,lr }   @ 保存使用到的寄存器
-                                    @ 注意，此时的sp是中断模式的sp
-                                    @ 初始值是上面设置的3072
+    @sub lr, lr, #4                  @configure the return addr
+	ldr lr, _f
+    stmdb   sp!,    { r0-r12,lr }   @store the regs in irq stack
+                                    
+                                    
     
-    ldr lr, =int_return             @ 设置调用ISR即EINT_Handle函数后的返回地址  
-    ldr pc, =EINT_Handle            @ 调用中断服务函数，在interrupt.c中
+     ldr lr, _int_return               
+     ldr pc, _irqhandler    		@invoke irq handler           
+
+_int_return:
+	.word int_return
+_irqhandler:
+	.word irqhandler
+
 int_return:
-    ldmia   sp!,    { r0-r12,pc }^  @ 中断返回, ^表示将spsr的值复制到cpsr
 
+    ldmia   sp!,  { r0-r12,pc }^      @ ^ means restore the cpsr
 
+	
 
 #endif
 

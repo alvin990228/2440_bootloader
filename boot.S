@@ -1,4 +1,4 @@
-/******************************************************************
+/********************************************************************************************
  *Alvin-boot 2015.01.02 writen by Alvin
  *Versin:0.1.0
  *Functions:
@@ -10,8 +10,8 @@
  *6.Add LED Signal for Debug*********r6 register use to send signal!!
  *
  *2015.01.09
- *Now this project is Managed By GitHub 
-********************************************************************/
+ *Now this project is Managed By GitHub @github.com:alvin990228/2440_bootloader.git
+**********************************************************************************************/
 
 #include"s3c2440.h"
 
@@ -94,9 +94,9 @@ reset:
 ************************************************/
 
 		msr cpsr_c, #0xd2       @ Alvin+ : Enter the IRQ mode
-    ldr sp, =IRQSTACK       @ Alvin+ : now the sp is irq_sp 
+    		ldr sp, =IRQSTACK       @ Alvin+ : now the sp is irq_sp 
 
-    msr cpsr_c, #0xd3       @ Alvin+ : Return to the SVC mode
+   	        msr cpsr_c, #0xd3       @ Alvin+ : Return to the SVC mode
 
 
 
@@ -287,7 +287,33 @@ SMRDATA:
 	ldr sp, =SVCSTACK
 	mov fp, #0
 
+
+/************************************************
+*Initialize the Interrupt Controler and
+*enable the IRQs
+*for Using INTs
+*************************************************/
 	
+	
+/*Initialize the interrupt*/
+	ldr r0, =GPGCON
+	ldr r1, =0x80A882  @SET GPIO0,3,5,6,7,11 EINT
+	str r1, [r0]
+	
+	ldr r0, =GPGUP
+	ldr r1, =0x8E9    @Disable pull-up
+	str r1, [r0]
+	
+	ldr r0, =EINTMASK
+	ldr r1, =0xFFF716FF  @disable masking interrupts
+	str r1, [r0]
+     	 
+	ldr r0, =INTMSK 
+    	ldr r1, =0xFFFFFFDF  @EINT8_23 service avaliable
+	str r1, [r0]
+	
+
+        msr cpsr_c, #0x53       @enable the IRQ in CPSR in SVC mode
 /**********************************************
 *Everything is fine now,Ready run on the SDRAM
 **********************************************/
@@ -331,17 +357,25 @@ led:
 
 
 HandleIRQ:
-    sub lr, lr, #4                  @configure the return addr
+    @sub lr, lr, #4                  @configure the return addr
+	ldr lr, _f
     stmdb   sp!,    { r0-r12,lr }   @store the regs in irq stack
                                     
                                     
     
-     ldr lr, =int_return               
-     ldr pc, =irqhandler    		@invoke irq handler           
+     ldr lr, _int_return               
+     ldr pc, _irqhandler    		@invoke irq handler           
+
+_int_return:
+	.word int_return
+_irqhandler:
+	.word irqhandler
+
 int_return:
-    ldmia   sp!,    { r0-r12,pc }^  @ ^ means restore the cpsr
 
+    ldmia   sp!,  { r0-r12,pc }^      @ ^ means restore the cpsr
 
+	
 
 #endif
 
