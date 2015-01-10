@@ -8,8 +8,8 @@
 //Initialize the led gpio
 void led_init(){
 
-	GPBCON |= LED_IO;     //set GPB5~8 oupput
-	GPBUP  |= LED_DISUP;  //disable pull-up  
+	GET_GPBCON |= LED_IO;     //set GPB5~8 oupput
+	GET_GPBUP  |= LED_DISUP;  //disable pull-up  
 
 
 }
@@ -31,14 +31,14 @@ void led_delay(unsigned long time){
 
 //switch on all leds
 void led_allon(){
-	GPBDAT &= LED_ALLON;
+	GET_GPBDAT &= LED_ALLON;
 }
 
 
 
 //switch off
 void led_alloff(){
-	GPBDAT |= LED_ALLOFF;
+	GET_GPBDAT |= LED_ALLOFF;
 
 }
 
@@ -48,19 +48,19 @@ void led_non(unsigned int n){
 	switch(n){
 	
 		case 1:
-			GPBDAT &= LED_1ON;
+			GET_GPBDAT &= LED_1ON;
 			break;
 		case 2:
-			GPBDAT &= LED_2ON;
+			GET_GPBDAT &= LED_2ON;
 			break;
 		case 3:
-			GPBDAT &= LED_3ON;
+			GET_GPBDAT &= LED_3ON;
 			break;
 		case 4:
-			GPBDAT &= LED_4ON;
+			GET_GPBDAT &= LED_4ON;
 			break;
 		default:
-			GPBDAT &= LED_ALLON;
+			GET_GPBDAT &= LED_ALLON;
 
 	
 	}	
@@ -73,19 +73,19 @@ void led_noff(unsigned int n){
 	switch(n){
 	
 		case 1:
-			GPBDAT |= LED_1OFF;
+			GET_GPBDAT |= LED_1OFF;
 			break;
 		case 2:
-			GPBDAT |= LED_2OFF;
+			GET_GPBDAT |= LED_2OFF;
 			break;
 		case 3:
-			GPBDAT |= LED_3OFF;
+			GET_GPBDAT |= LED_3OFF;
 			break;
 		case 4:
-			GPBDAT |= LED_4OFF;
+			GET_GPBDAT |= LED_4OFF;
 			break;
 		default:
-			GPBDAT |= LED_ALLOFF;
+			GET_GPBDAT |= LED_ALLOFF;
 
 	
 	}	
@@ -94,14 +94,15 @@ void led_noff(unsigned int n){
 //switch on leds by shifting lift
 void led_shl(unsigned int time){
 		while(time > 0 ){
-			GPBDAT = LED_1ON;
+			GET_GPBDAT = LED_1ON;
 			led_delay(10);
-			GPBDAT = LED_2ON;
+			GET_GPBDAT = LED_2ON;
 			led_delay(10);
-			GPBDAT = LED_3ON;
+			GET_GPBDAT = LED_3ON;
 			led_delay(10);
-			GPBDAT = LED_4ON;
+			GET_GPBDAT = LED_4ON;
 			led_delay(10);
+			GET_GPBDAT |= LED_4OFF;
 
 			time--;
 		}
@@ -110,15 +111,15 @@ void led_shl(unsigned int time){
 //switch on leds by shifting right
 void led_shr(unsigned int time){
 	while(time > 0){
-			GPBDAT = LED_4ON;
+			GET_GPBDAT = LED_4ON;
 			led_delay(10);
-			GPBDAT = LED_3ON;
+			GET_GPBDAT = LED_3ON;
 			led_delay(10);
-			GPBDAT = LED_2ON;
+			GET_GPBDAT = LED_2ON;
 			led_delay(10);
-			GPBDAT = LED_1ON;
+			GET_GPBDAT = LED_1ON;
 			led_delay(10);
-
+			GET_GPBDAT |=LED_1OFF;
 			time--;
 	}
 
@@ -130,11 +131,11 @@ void led_flash(unsigned int time){
 	
 	while( time > 0 ){
 		
-		GPBDAT &= LED_ALLON;
+		GET_GPBDAT &= LED_ALLON;
 
 		led_delay(10);
 
-		GPBDAT |= LED_ALLOFF;
+		GET_GPBDAT |= LED_ALLOFF;
 
 		led_delay(10);
 
