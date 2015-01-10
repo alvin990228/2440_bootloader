@@ -18,33 +18,34 @@
 .section .text
 .global _start
 _start:
-
+/*Exception Vectors*/
+	/*0x00 Reset*/
 	b reset
 	
-		/* 0x04: 未定义指令中止模式的向量地址 */
+		/* 0x04: Undefined instruction  */
 HandleUndef:
     b   HandleUndef 
  
-		/* 0x08: 管理模式的向量地址，通过SWI指令进入此模式 */
+		/* 0x08:  SWI */
 HandleSWI:
     b   HandleSWI
 
-  	/* 0x0c: 指令预取终止导致的异常的向量地址 */
+  	/* 0x0c: Abort prefech */
 HandlePrefetchAbort:
     b   HandlePrefetchAbort
 
-		/* 0x10: 数据访问终止导致的异常的向量地址 */
+		/* 0x10: Abort data */
 HandleDataAbort:
     b   HandleDataAbort
 
-		/* 0x14: 保留 */
+		/* 0x14: Reserved */
 HandleNotUsed:
     b   HandleNotUsed
 
-		/* 0x18: 中断模式的向量地址 */
+		/* 0x18: IRQ*/
     b   HandleIRQ
 
-		/* 0x1c: 快中断模式的向量地址 */
+		/* 0x1c: FIQ */
 HandleFIQ:
     b   HandleFIQ
 	
@@ -330,15 +331,15 @@ led:
 
 
 HandleIRQ:
-    sub lr, lr, #4                  @ 计算返回地址
-    stmdb   sp!,    { r0-r12,lr }   @ 保存使用到的寄存器
-                                    @ 注意，此时的sp是中断模式的sp
-                                    @ 初始值是上面设置的3072
+    sub lr, lr, #4                  @configure the return addr
+    stmdb   sp!,    { r0-r12,lr }   @store the regs in irq stack
+                                    
+                                    
     
-@    ldr lr, =int_return               
-@    ldr pc, =EINT_Handle            
+     ldr lr, =int_return               
+     ldr pc, =irqhandler    		@invoke irq handler           
 int_return:
-    ldmia   sp!,    { r0-r12,pc }^  @ 中断返回, ^表示将spsr的值复制到cpsr
+    ldmia   sp!,    { r0-r12,pc }^  @ ^ means restore the cpsr
 
 
 
