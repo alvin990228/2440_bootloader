@@ -2,7 +2,7 @@
 boot.bin : boot.elf
 	arm-linux-objcopy -O binary $^ $@
 
-boot.elf : boot.o  nand.o f.o led.o
+boot.elf : boot.o  nand.o f.o keys.o led.o
 	arm-linux-ld -Tboot.lds $^ -o $@
 
 boot.o : boot.S
@@ -12,6 +12,9 @@ nand.o : nand.c
 	arm-linux-gcc -c $^ -o $@
 
 f.o : f.c 
+	arm-linux-gcc -c $^ -o $@
+
+keys.o : keys.c
 	arm-linux-gcc -c $^ -o $@
 	
 led.o : led.c

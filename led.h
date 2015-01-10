@@ -6,10 +6,11 @@
  * 4 LEDs  LED_1:GPB5,LED_2:PGB6
  *         LED_2:GPB7,LED_4:GPB8
  * ***********************************/
+#include"s3c2440.h"
 
-#define GPBCON  (*(volatile unsigned int *)(0x56000010))
-#define GPBDAT  (*(volatile unsigned int *)(0x56000014))
-#define GPBUP   (*(volatile unsigned int *)(0x56000018))
+#define GET_GPBCON  (*(volatile unsigned int *)GPBCON)
+#define GET_GPBDAT  (*(volatile unsigned int *)GPBDAT)
+#define GET_GPBUP   (*(volatile unsigned int *)GPBUP)
 
 #define LED_IO    ((1<<10)|(1<<12)|(1<<14)|(1<<16)) //set GPB5-8 output
 #define LED_DISUP  ((1<<5)|(1<<6)|(1<<7)|(1<<8))    //diable GPB5-8 pull-up 
