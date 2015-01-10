@@ -1,59 +1,38 @@
-#define GPBCON  (*(volatile unsigned int *)(0x56000010))
-#define GPBDAT  (*(volatile unsigned int *)(0x56000014))
-#define GPBUP   (*(volatile unsigned int *)(0x56000018))
-#define LED_5    ~(1<<5)
-#define LED_6    ~(1<<6)
-#define LED_7    ~(1<<7)
-#define LED_8    ~(1<<8)
-#define LED_57   ~((1<<5)|(1<<7))
-#define LED_68   ~((1<<6)|(1<<8))
-#define LED_OFF  0xFF
-#define LED_ON   0x00
+#include"led.h"
 
-
-
-
-static void delay(unsigned long time){
-
-	while(time > 0) time--;
-
-
-}
-
-static void shL(){
-     unsigned int ledon = 0;
-
-	 for(;ledon <= 15;ledon++){
-	 
-	 		GPBDAT = (ledon<<5); 
-			
-					delay(300000);
-	 }
-
-
-
-}
 void f(){ 
+	led_init();
 
-	GPBCON |=(1<<10)|(1<<12)|(1<<14)|(1<<16);
-
-	GPBUP   =0xff;
 	while(1){
-/*
- 		GPBDAT  = LED_68;
 
-      		delay(300000);
-		
-		GPBDAT = LED_OFF;
-	
-		delay(2000000);
-		GPBDAT = LED_57;
-		
-		delay(100000);
-		GPBDAT = LED_OFF;
-*/
-	shL();		
+			led_allon();
 
+			led_delay(10);
+
+			led_noff(2);
+
+			led_delay(10);
+
+			led_noff(3);
+		
+			led_delay(10);
+
+			led_noff(1);
+			
+			led_delay(10);
+
+			led_noff(4);
+			
+			led_delay(15);
+
+			led_flash(3);
+			led_delay(20);
+
+			led_shr(2);
+
+			led_delay(13);
+
+			led_shl(4);		
 	}
 
         

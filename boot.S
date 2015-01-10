@@ -335,8 +335,8 @@ HandleIRQ:
                                     @ 注意，此时的sp是中断模式的sp
                                     @ 初始值是上面设置的3072
     
-    ldr lr, =int_return             @ 设置调用ISR即EINT_Handle函数后的返回地址  
-    ldr pc, =EINT_Handle            @ 调用中断服务函数，在interrupt.c中
+@    ldr lr, =int_return               
+@    ldr pc, =EINT_Handle            
 int_return:
     ldmia   sp!,    { r0-r12,pc }^  @ 中断返回, ^表示将spsr的值复制到cpsr
 

@@ -24,8 +24,19 @@
 #define LED_4ON    ~(1<<8)
 #define LED_13   ~((1<<5)|(1<<7))
 #define LED_24   ~((1<<6)|(1<<8))
-#define LED_ALLOFF  0xFF
-#define LED_ALLON   0x00
+#define LED_ALLOFF  ((1<<5)|(1<<6)|(1<<7)|(1<<8))
+#define LED_ALLON   ~LED_ALLOFF
+
+
+void led_init();
+void led_delay(unsigned long time);
+void led_allon();
+void led_alloff();
+void led_non(unsigned int n);
+void led_noff(unsigned int n);
+void led_shl(unsigned int time);
+void led_shr(unsigned int time);
+void led_flash(unsigned int time);
 
 
 #endif

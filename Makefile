@@ -1,7 +1,8 @@
+
 boot.bin : boot.elf
 	arm-linux-objcopy -O binary $^ $@
 
-boot.elf : boot.o  nand.o signal.o f.o
+boot.elf : boot.o  nand.o f.o led.o
 	arm-linux-ld -Tboot.lds $^ -o $@
 
 boot.o : boot.S
@@ -10,10 +11,10 @@ boot.o : boot.S
 nand.o : nand.c
 	arm-linux-gcc -c $^ -o $@
 
-signal.o : signal.c
-	arm-linux-gcc -c $^ -o $@
-
 f.o : f.c 
+	arm-linux-gcc -c $^ -o $@
+	
+led.o : led.c
 	arm-linux-gcc -c $^ -o $@
 
 .PHONY : clean showobj
