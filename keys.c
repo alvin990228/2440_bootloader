@@ -7,6 +7,7 @@
 #define GET_KEY (*(volatile unsigned int *)EINTPEND)
 #define GET_IRQ (*(volatile unsigned int *)SRCPND)
 #define GET_INTMSK (*(volatile unsigned int *)INTMSK)
+#define GET_INTPND  (* (volatile unsigned int *)INTPND)
 #define KEYS  (1<<5)  //EINT8_23  SRCPND[5]  
 #define KEY1  	(1<<8)
 #define KEY2	(1<<11)
@@ -25,9 +26,13 @@ void k6();
 void kdefault();
 
 void irqhandler(){
-	led_shr(1);
+	
+	unsigned int status = GET_GPBDAT;  //store the GPBDAT status
 
+	led_alloff();
+	
 	unsigned int irq =  GET_IRQ;
+	
 	if( KEYS & irq ){    //if IRQ is EINT8_23
 	
 		unsigned int key =  GET_KEY;
@@ -55,22 +60,24 @@ void irqhandler(){
 						default:
 								kdefault();
 				}
-		GET_KEY = GET_KEY; //clear the EINTPEND
-		GET_IRQ = GET_IRQ; //clear the SRCPND
+		
 				
 									
 	}
 
-	led_flash(2);
+	
 
-	GET_INTMSK = 0xFFFFFFFF;  //MASK ALL INTs
-/*
 	else{
 
 		nokeys();
 		GET_IRQ = GET_IRQ; //clear the SRCPND 
 	}
-*/
+
+		GET_GPBDAT = status;  //recover the  GPBDAT
+		GET_KEY = GET_KEY;    //clear the EINTPEND
+		GET_IRQ = GET_IRQ;    //clear the SRCPND
+		GET_INTPND = GET_INTPND; //clear the INTPND
+
 }
 
 

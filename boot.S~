@@ -43,13 +43,15 @@ HandleNotUsed:
     b   HandleNotUsed
 
 		/* 0x18: IRQ*/
-    b   HandleIRQ
+       ldr pc, _HandleIRQ  
 
 		/* 0x1c: FIQ */
 HandleFIQ:
     b   HandleFIQ
+    
 	
-	
+_HandleIRQ:
+		.word HandleIRQ  
 	
 	
 reset:
@@ -87,19 +89,6 @@ reset:
 	ldr	r0, =INTSUBMSK
 	str	r1, [r0]
 #endif
-
-
-/***************SET IRQ STACK*******************
-*set IRQ stack for IRQ handling
-************************************************/
-
-		msr cpsr_c, #0xd2       @ Alvin+ : Enter the IRQ mode
-    		ldr sp, =IRQSTACK       @ Alvin+ : now the sp is irq_sp 
-
-   	        msr cpsr_c, #0xd3       @ Alvin+ : Return to the SVC mode
-
-
-
 
 
 
@@ -176,7 +165,6 @@ reset:
 
 /**********************************************
 *Initialize the Memory Controler
-*@Have Bugs@
 ***********************************************/
 #define MEM 
 #ifdef MEM
@@ -215,7 +203,7 @@ SMRDATA:
     .word ((B6_MT<<15)+(B6_Trcd<<2)+(B6_SCAN))
     .word ((B7_MT<<15)+(B7_Trcd<<2)+(B7_SCAN))
     .word ((REFEN<<23)+(TREFMD<<22)+(Trp<<20)+(Trc<<18)+(Tchr<<16)+REFCNT)
-    .word 0xb1 /*Alvin+ : in mini2440 BK76MAP 64MB/64MB*/
+    .word 0xb1  /*Alvin+ : in mini2440 BK76MAP 64MB/64MB*/
     .word 0x30
     .word 0x30
 	
@@ -314,6 +302,8 @@ SMRDATA:
 	
 
         msr cpsr_c, #0x53       @enable the IRQ in CPSR in SVC mode
+
+        
 /**********************************************
 *Everything is fine now,Ready run on the SDRAM
 **********************************************/
@@ -322,13 +312,12 @@ SMRDATA:
 	ldr r6, =LED_4
 	bl led
 
+	ldr lr, _f
 	ldr pc, _f
 
 	_f:
 		.word f
 
-@	ldr pc, =f
-@	bl f
 /************************************************
  *LED Signal used to show program status
  ************************************************/
@@ -351,14 +340,15 @@ led:
 
 
 
-/*******************IRQ*************************/
+/*******************IRQ Handler*********************/
 #define IRQHANDLE
 #ifdef  IRQHANDLE
-
-
+	
+	.align 5
 HandleIRQ:
-    @sub lr, lr, #4                  @configure the return addr
-	ldr lr, _f
+    	sub lr, lr, #4                  @configure the return addr
+    	ldr sp, =IRQSTACK               @ Alvin+ : now the sp is irq_sp, set irq stack 
+	
     stmdb   sp!,    { r0-r12,lr }   @store the regs in irq stack
                                     
                                     
@@ -372,8 +362,8 @@ _irqhandler:
 	.word irqhandler
 
 int_return:
-
-    ldmia   sp!,  { r0-r12,pc }^      @ ^ means restore the cpsr
+	
+       ldmia   sp!,  { r0-r12,pc }^      @ ^ means restore the cpsr
 
 	
 
