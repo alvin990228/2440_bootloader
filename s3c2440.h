@@ -1,5 +1,9 @@
-#ifndef S3C2440
-#define S3C2440
+#ifndef S3C2440_HEAD
+#define S3C2440_HEAD
+
+/*UNIVERSIAL DATA TYPE DEFINE*/
+#define NULL 0x0 
+
 
 /*GENGRAL STATUS REGISTER*/
 
@@ -217,6 +221,15 @@
 #define UBRDIV0  0X50000028  //UART Baud Rate Divisor REG CH0
 #define UBRDIV1  0X50000028  //CH1
 #define UBRDIV2  0X50000028  //CH2
+
+
+/********Uart Port**********************
+* in mini2440 TxD0: GPH2, RxD0:GPH3
+**************************************/
+
+#define GPHCON 0X56000070
+#define GPHDAT 0X56000074
+#define GPHUP  0X56000078
 
 
 
