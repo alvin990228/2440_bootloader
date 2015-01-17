@@ -54,15 +54,7 @@ void uart_init(unsigned int baud_rate, unsigned int data_length, unsigned int pa
 	GET_UFOCN0 = 0x00;//disable FIFO
 	GET_UMCON0 = 0x00;//disable flow control
 
-/*
-	GET_GPHCON   |= 0xa0;    // GPH2,GPH3ÓÃ×÷TXD0,RXD0
-    GET_GPHUP    = 0x0c;     // GPH2,GPH3ÄÚ²¿ÉÏÀ­
 
-    GET_ULCON0  = 0x03;     // 8N1(8\u017eöÊý\u0178ÝÎ»£¬ÎÞ\u0153ÏÑé£¬1\u017eöÍ£Ö¹Î»)
-    UCON0   = 0x05;     // ²éÑ¯·\u0153Ê\u0153£¬UARTÊ±ÖÓÔ\u017dÎªPCLK
-    UFCON0  = 0x00;     // ²»Ê¹ÓÃFIFO
-    UMCON0  = 0x00;     // ²»Ê¹ÓÃÁ÷¿Ø
-*/
 
 	GET_UBRDIV0 = 26; //set baud rate ,now the MPLL is 405Mhz ,PCLK is 50626000hz,in this UBRDIV0 should be 26~27
 
@@ -72,20 +64,25 @@ void uart_init(unsigned int baud_rate, unsigned int data_length, unsigned int pa
 /*
 *send data by TxD
 */
-void uart_send(char str)
+void uart_send(char* str)
 {
-	//char* p = str;
+	char* p = str;
 
-	//while(*p != NULL){
+
+	while( *p != NULL ){
 
 		
 		while(!(trans_ready())); //wait untile trans buffer is ready!
 		
-			GET_UTXH0 = str;
+			GET_UTXH0 = *p++;
+			
+			
 		
-		led_flash(2);
+	}
+	while(!(trans_ready())); //move the cursor to the begining!
 		
-	//}
+			GET_UTXH0 = '\r';
+			
 
 }
 

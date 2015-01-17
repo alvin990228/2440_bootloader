@@ -34,7 +34,7 @@ void uart_init(unsigned int baud_rate, unsigned int data_length, unsigned int pa
 /*
 *send data by TxD
 */
-void uart_send(char str);
+void uart_send(char* str);
 
 /*
 *reveive data from uart RxD

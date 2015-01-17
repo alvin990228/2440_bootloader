@@ -3,6 +3,7 @@
 *******************************************************/
 #include"s3c2440.h"
 #include"led.h"
+#include"uart.h"
 
 #define GET_KEY (*(volatile unsigned int *)EINTPEND)
 #define GET_IRQ (*(volatile unsigned int *)SRCPND)
@@ -40,21 +41,32 @@ void irqhandler(){
 				switch(key){
 				
 						case KEY1:
+								uart_send("\r\nNow Key_1 is pressed!\n");
 								k1();
 								break;
+								
 						case KEY2:
+								uart_send("\r\nNow Key_2 is pressed!\n");
 								k2();
 								break;
+								
 						case KEY3:
+ 								uart_send("\r\nNow Key_3 is pressed!\n");
 								k3();
 								break;
+								
 						case KEY4:
+								uart_send("\r\nNow Key_4 is pressed!\n");
 								k4();
 								break;
+								
 						case KEY5:
+								uart_send("\r\nNow Key_5 is pressed!\n");
 								k5();
 								break;
+								
 						case KEY6:
+								uart_send("\r\nNow Key_6 is pressed!\n");
 								k6();
 								break;
 						default:
