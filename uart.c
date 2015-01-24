@@ -9,7 +9,7 @@
 #define GET_GPHCON  	(*(volatile unsigned int*)GPHCON)
 #define GET_GPHUP   	(*(volatile unsigned int*)GPHUP)
 #define GET_ULCON0  	(*(volatile unsigned int*)ULCON0)
-#define GET_UCON0  	(*(volatile unsigned int*)UCON0)
+#define GET_UCON0  		(*(volatile unsigned int*)UCON0)
 #define GET_UFOCN0  	(*(volatile unsigned int*)UFCON0)
 #define GET_UMCON0  	(*(volatile unsigned int*)UMCON0)
 #define GET_UBRDIV0		(*(volatile unsigned int*)UBRDIV0)
@@ -79,10 +79,7 @@ void uart_send(char* str)
 			
 		
 	}
-	while(!(trans_ready())); //move the cursor to the begining!
-		
-			GET_UTXH0 = '\r';
-			
+	
 
 }
 
@@ -92,6 +89,19 @@ void uart_send(char* str)
 */
 unsigned char uart_receive()
 {
+
+	char ch ;
+	
+
+	while(!(rec_ready())); //wait untile trans buffer is ready!
+		
+			ch = GET_URXH0 ;
+
+			
+	char str[2] ={ch, NULL};
+
+			uart_send(str);
+			
 
 
 }

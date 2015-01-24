@@ -227,9 +227,45 @@
 * in mini2440 TxD0: GPH2, RxD0:GPH3
 **************************************/
 
-#define GPHCON 0X56000070
+#define GPHCON 0X560000700
 #define GPHDAT 0X56000074
 #define GPHUP  0X56000078
+
+/********PWM Timer******************
+in mini2440 TOUT0~TOUT3:GPB0~GPB3
+************************************/
+
+//timer set regs
+#define TCFG0 	0X51000000	//prescaer0,prescaler1,DeadZone Length
+#define TCFG1 	0X51000004	//MUX0~4 ,DMA
+#define TCON  	0X51000008	//load control
+
+//timer1 with PWM
+#define TCNTB0	0X5100000c	//timer count buffer	
+#define TCMPB0	0X51000010	//timer compare buffer
+#define TCNTO0	0X51000014	//count observation
+
+//timer2 with PWM
+#define TCNTB1	0X51000018	
+#define TCMPB1	0X5100001c
+#define TCNTO1	0X51000020
+
+//timer3 with PWM
+#define TCNTB2	0X51000024	
+#define TCMPB2	0X51000028
+#define TCNTO2	0X5100002c
+
+//timer4 with PWM
+#define TCNTB3	0X51000030	
+#define TCMPB3	0X51000034
+#define TCNTO3	0X51000038
+
+//timer5 without PWM
+#define TCNTB4	0X5100003c	
+#define TCNTO4	0X51000040
+
+
+
 
 
 

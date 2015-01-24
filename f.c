@@ -8,11 +8,11 @@
 #include"s3c2440.h"
 #include"led.h"
 #include"uart.h"
-
+#include"beep.h"
 void f(){ 
 	led_init();  //initialize the LEDs
 	uart_init(115200, EIGHT_DATA, NO_PARITY, ONE_STOP); //initialize the uart system
-	
+	beep_init();
 
 
 	/*these messages will be printed at the begining of the bootloaer start!*/
@@ -27,7 +27,7 @@ void f(){
 		         \r*4).Initialize the LEDs ,you can see leds turned on shiftly\n\
 		         \r*5).Initialize the Interrupt controler and you can use keys!\n\
 		         \r*6).Initialize the UART as you can see some messages are printed!\n\
-		         \r>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
+		         \r>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\r");
 	
 	
 	
@@ -35,6 +35,10 @@ void f(){
 
 	while(1){
 
+		beep_on();
+		led_delay(20);
+		beep_off();
+		led_delay(20);
 		led_shr(1);
 		led_shl(1);		
 	}
