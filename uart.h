@@ -7,6 +7,18 @@
 #define UART_HEAD
 #include"s3c2440.h"
 
+#define GET_GPHCON  	(*(volatile unsigned int*)GPHCON)
+#define GET_GPHUP   	(*(volatile unsigned int*)GPHUP)
+#define GET_ULCON0  	(*(volatile unsigned int*)ULCON0)
+#define GET_UCON0  		(*(volatile unsigned int*)UCON0)
+#define GET_UFOCN0  	(*(volatile unsigned int*)UFCON0)
+#define GET_UMCON0  	(*(volatile unsigned int*)UMCON0)
+#define GET_UBRDIV0		(*(volatile unsigned int*)UBRDIV0)
+#define GET_UTRSATA0	(*(volatile unsigned int*)UTRSTAT0)
+#define GET_URXH0		(*(volatile unsigned int*)URXH0L) //Little Endian Mode
+#define GET_UTXH0		(*(volatile unsigned int*)UTXH0L) //Little Endian Mode
+
+
 //data length
 #define FIVE_DATA   0x00
 #define SIX_DTAT	0x01

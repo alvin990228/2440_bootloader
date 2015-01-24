@@ -2,7 +2,7 @@
 boot.bin : boot.elf
 	arm-linux-objcopy -O binary $^ $@
 
-boot.elf : boot.o  nand.o f.o keys.o led.o uart.o beep.o
+boot.elf : boot.o  nand.o f.o keys.o led.o uart.o  beep.o timer.o interrupt.o
 	arm-linux-ld -Tboot.lds $^ -o $@
 
 boot.o : boot.S
@@ -24,6 +24,12 @@ uart.o : uart.c
 	arm-linux-gcc -c $^ -o $@
 
 beep.o : beep.c
+	arm-linux-gcc -c $^ -o $@
+
+timer.o : timer.c
+	arm-linux-gcc -c $^ -o $@
+
+interrupt.o : interrupt.c
 	arm-linux-gcc -c $^ -o $@
 
 .PHONY : clean showobj

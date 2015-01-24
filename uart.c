@@ -6,16 +6,7 @@
 #include"uart.h"
 #include"led.h"
 
-#define GET_GPHCON  	(*(volatile unsigned int*)GPHCON)
-#define GET_GPHUP   	(*(volatile unsigned int*)GPHUP)
-#define GET_ULCON0  	(*(volatile unsigned int*)ULCON0)
-#define GET_UCON0  		(*(volatile unsigned int*)UCON0)
-#define GET_UFOCN0  	(*(volatile unsigned int*)UFCON0)
-#define GET_UMCON0  	(*(volatile unsigned int*)UMCON0)
-#define GET_UBRDIV0		(*(volatile unsigned int*)UBRDIV0)
-#define GET_UTRSATA0	(*(volatile unsigned int*)UTRSTAT0)
-#define GET_URXH0		(*(volatile unsigned int*)URXH0L) //Little Endian Mode
-#define GET_UTXH0		(*(volatile unsigned int*)UTXH0L) //Little Endian Mode
+
 
 
 
@@ -42,6 +33,7 @@ void uart_init(unsigned int baud_rate, unsigned int data_length, unsigned int pa
 {	
 
 	GET_GPHCON |= ((1<<5)|(1<<7));  //set  GPH2 TxD GPH3 RxD function
+	
 	GET_GPHUP  &=~((1<<2)|(1<<3));  //enable pull-up for TxD & RxD
 
 	

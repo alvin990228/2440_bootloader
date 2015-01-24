@@ -8,9 +8,13 @@
 
 void beep_init(){
 
-	GET_GPBCON |= (1<<0);	//set BPG0 output
 	GET_GPBUP  |= (1<<0);	//disable GPB-UP for GPB0
+	GET_GPBCON |= (1<<0);	//set BPG0 output
 	GET_GPBDAT &= ~(1<<0);	//trun off the beep
+
+	
+	
+		
 
 }
 void beep_on(){

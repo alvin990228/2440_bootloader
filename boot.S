@@ -297,7 +297,7 @@ SMRDATA:
 	str r1, [r0]
      	 
 	ldr r0, =INTMSK 
-    	ldr r1, =0xFFFFFFDF  @EINT8_23 service avaliable
+    	ldr r1, =0xFFFFFBDF  @EINT8_23 service avaliable
 	str r1, [r0]
 	
 

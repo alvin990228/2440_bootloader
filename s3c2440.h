@@ -227,7 +227,7 @@
 * in mini2440 TxD0: GPH2, RxD0:GPH3
 **************************************/
 
-#define GPHCON 0X560000700
+#define GPHCON 0X56000070
 #define GPHDAT 0X56000074
 #define GPHUP  0X56000078
 

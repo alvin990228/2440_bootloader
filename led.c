@@ -93,33 +93,58 @@ void led_noff(unsigned int n){
 
 //switch on leds by shifting lift
 void led_shl(unsigned int time){
+		led_alloff();	//cleat all leds
+		
 		while(time > 0 ){
-			GET_GPBDAT = LED_1ON;
-			led_delay(10);
-			GET_GPBDAT = LED_2ON;
-			led_delay(10);
-			GET_GPBDAT = LED_3ON;
-			led_delay(10);
-			GET_GPBDAT = LED_4ON;
-			led_delay(10);
-			GET_GPBDAT |= LED_4OFF;
 
+			led_non(1);
+			led_delay(10);
+			led_noff(1);
+			
+			
+			led_non(2);
+			led_delay(10);
+			led_noff(2);
+			
+			
+			led_non(3);
+			led_delay(10);
+			led_noff(3);
+
+			
+			led_non(4);
+			led_delay(10);
+			led_noff(4);
+			led_delay(10);
+			
 			time--;
 		}
 }
 
 //switch on leds by shifting right
 void led_shr(unsigned int time){
+	led_alloff();	//clear all leds
 	while(time > 0){
-			GET_GPBDAT = LED_4ON;
+			led_non(4);
 			led_delay(10);
-			GET_GPBDAT = LED_3ON;
+			led_noff(4);
+			
+			
+			led_non(3);
 			led_delay(10);
-			GET_GPBDAT = LED_2ON;
+			led_noff(3);
+			
+			
+			led_non(2);
 			led_delay(10);
-			GET_GPBDAT = LED_1ON;
+			led_noff(2);
+			
+			
+			led_non(1);
 			led_delay(10);
-			GET_GPBDAT |=LED_1OFF;
+			led_noff(1);
+			led_delay(10);
+			
 			time--;
 	}
 
@@ -145,3 +170,8 @@ void led_flash(unsigned int time){
 
 
 }
+
+
+
+
+
